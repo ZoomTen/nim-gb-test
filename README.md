@@ -7,6 +7,7 @@ This is an experiment in the vein of [Nim on GBA](https://github.com/hcorion/nim
 ## What's in here?
 
 - an incomplete set of GBDK bindings (at least they're documented, I guess)
+  - `nim_src/gbdk/todo/*.h` are the original GBDK headers with the comments removed (that's the C in the github languages count), they aren't used&mdash;it's just to keep track how many functions are accessible from Nim so far :p
 - a custom `nimbase.h`
 - two ported GBDK examples (`phys` and `scroller`) and a test of my own
 - a buggy Arkanoid clone with a *very* (/s) original name: "Rebrick'd"
@@ -16,6 +17,8 @@ This is an experiment in the vein of [Nim on GBA](https://github.com/hcorion/nim
 Uses neither Nimble nor Nake, but rather plain ol' Make. :p Though, I want to turn the Makefile into Nimble tasks in the future.
 
 Other than that, you'll of course need [GBDK-2020](https://gbdk-2020.github.io). Make sure to edit the Makefile to point to your GBDK installation.
+
+The Makefile contains an `asm-debug` target that compiles to ASM and puts it under `_asmbuild`. Just in case you wanna look at what's in the ROM from the Nim-generated C source.
 
 ## Attribution and License Info
 

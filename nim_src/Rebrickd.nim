@@ -187,12 +187,12 @@ proc removeBrick(tile, x, y: uint8) =
   # remove the corresponding half as well
   case BgGfxParts(tile)
   of bgPaddleLhalf:
-    setBkgTileXY(x, y, 8)
-    setBkgTileXY(x+1, y, 8)
+    discard setBkgTileXY(x, y, 8)
+    discard setBkgTileXY(x+1, y, 8)
     score += 1
   of bgPaddleRhalf:
-    setBkgTileXY(x, y, 8)
-    setBkgTileXY(x-1, y, 8)
+    discard setBkgTileXY(x, y, 8)
+    discard setBkgTileXY(x-1, y, 8)
     score += 1
   else:
     discard

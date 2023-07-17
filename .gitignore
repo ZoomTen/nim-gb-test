@@ -1,0 +1,6 @@
+*.gb
+*.map
+*.noi
+*.sym
+*.ihx
+_nimbuild/

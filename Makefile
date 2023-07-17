@@ -12,7 +12,7 @@ ASM_SRC := $(wildcard asm/*.asm)
 NIM_FLAGS := --gc:none --os:standalone -d:danger --checks:off --showAllMismatches:on
 NIM := nim
 
-ROM_NAME := Scroller
+ROM_NAME := Rebrickd
 NIM_ENTRY_FILE := $(NIM_SRC)/$(ROM_NAME).nim
 
 GBDK_HOME := ../gbdk/

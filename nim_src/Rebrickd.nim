@@ -215,8 +215,8 @@ proc playIntermissionSound() {.inline.} =
   Nr14Reg = 0xc3
 
 proc removeBrick(tile, x, y: uint8) =
-  # when hitting one half of a brick,
-  # remove the corresponding half as well
+  ## When hitting one half of a brick,
+  ## remove the corresponding half as well
   case BgGfxParts(tile)
   of bgPaddleLhalf:
     discard setBkgTileXY(x, y, 8)
@@ -278,9 +278,8 @@ proc handleBall() {.inline.} =
     getBkgTileXY(ballXColl-1, ballYColl).removeBrick(ballXColl-1, ballYColl)
 
   # check for collision with paddle
-  if (ballYReal == paddleYReal-6) and
-    (ballXReal >= paddleXReal-8) and
-    (ballXReal <= paddleXReal+8):
+  if (ballYReal == paddleYReal-6) and (ballXReal >= paddleXReal-8) and (
+      ballXReal <= paddleXReal+8):
     ballSpeedY = -ballSpeedY
     playBounceSound()
 
@@ -362,7 +361,7 @@ proc initIntermission() =
   playIntermissionSound()
 
   # wait a while
-  delay 800
+  delay 2000
 
   # fade out
   for i in [
@@ -373,7 +372,7 @@ proc initIntermission() =
   ]:
     BgpReg = i.uint8
     Obp0Reg = BgpReg
-    delay 60
+    delay 30
 
   ballX = BallStartX
   ballY = BallStartY

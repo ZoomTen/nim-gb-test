@@ -35,11 +35,11 @@ Setting up for SGB multi-joypad example:
     var joyPads = Joypads()
     
     # init 1 joypad
-    discard joyPads.joypadInit(1)
+    discard joyPads.init(1)
     
     while true:
       # update the joypad state
-      joyPads.joypadEx()
+      joyPads.poll()
       
       # read from it...
       if jUp in joyPads.joy0:
@@ -48,21 +48,15 @@ Setting up for SGB multi-joypad example:
 
 type
   JoypadKey* {.size: 1.} = enum
-    jRight
-    jLeft
-    jUp
-    jDown
-    jA
-    jB
-    jSelect
-    jStart
+    jRight,jLeft,jUp,jDown
+    jA,jB,jSelect,jStart
 
   JoypadKeys* = set[JoypadKey] ##[
     Indicates which keys are currently pressed.
     
     See also
       - `joypad`_
-      - `joypadEx template`_
+      - `poll template`_
   ]##
 
 proc joypad*(): JoypadKeys {.importc, gb.} ##[
@@ -97,14 +91,13 @@ type
   Joypads* {.importc: "joypads_t", gb.} = object ##[
     Multiplayer joypad structure.
 
-    Must be initialized with `joypadInit`_ first then it
-    may be used to poll all avaliable joypads with `joypadEx`_
+    Must be initialized with `init`_ first then it
+    may be used to poll all avaliable joypads with `poll`_
 ]##
     npads*, joy0*, joy1*, joy2*, joy3*: JoypadKeys
 
 proc joypadInit*(npads: uint8, joypads: ptr Joypads): uint8 {.importc: "joypad_init", gb.}
-
-template joypadInit*(joypads: Joypads, npads: uint8): uint8 = ##[
+template init*(joypads: Joypads, npads: uint8): uint8 = ##[
     Initializes joypads_t structure for polling multiple joypads
     (for the GB and ones connected via SGB)
 
@@ -112,26 +105,26 @@ template joypadInit*(joypads: Joypads, npads: uint8): uint8 = ##[
         - `joypads` pointer to joypads_t structure to be initialized
         - `npads` number of joypads requested (1, 2 or 4)
     
-    Only required for `joypadEx`_, not required for calls to regular `joypad`_
+    Only required for `poll`_, not required for calls to regular `joypad`_
 
     Returns:
       - number of joypads available
     
     See also:
-      - `joypadEx`_
+      - `poll`_
       - `Joypads`_
 ]##
   joypadInit(npads, unsafeAddr joypads)
 
 proc joypadEx*(joypads: ptr Joypads) {.importc: "joypad_ex", gb.}
-template joypadEx*(joypads: Joypads) = ##[
+template poll*(joypads: Joypads) = ##[
     Polls all avaliable joypads (for the GB and ones connected via SGB)
 
     Params:
-      - `joypads` Must be previously initialized with `joypadInit`_
+      - `joypads` Must be previously initialized with `init`_
     
     See also:
-      - `joypadInit`_
+      - `init`_
       - `Joypads`_
 ]##
   joypadEx(unsafeAddr joypads)

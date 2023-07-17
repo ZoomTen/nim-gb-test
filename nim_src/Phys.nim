@@ -52,7 +52,7 @@ when isMainModule:
 
   LcdcReg = {lcdcBgOn, lcdcObjOn, lcdcOn, lcdcWin9c00}
 
-  discard joyPads.joypadInit(1)
+  discard joyPads.init(1)
 
   posX = 64 shl 4
   posY = 64 shl 4
@@ -62,7 +62,7 @@ when isMainModule:
   jumpCounter = 0
 
   while true:
-    joyPads.joypadEx()
+    joyPads.poll()
 
     # accelerate up & down
     if jUp in joypads.joy0:

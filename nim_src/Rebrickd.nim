@@ -2,7 +2,7 @@
 ##  with a few extras thrown in
 
 import gbdk/[
-  video, io, input, interrupts, misc, print
+  video, io, input, interrupts, misc
 ]
 
 proc `+=`(x: var uint16, y: int16) {.inline.} =
@@ -161,11 +161,9 @@ const gameModeStep = [
   runIntermission
 ]
 
-proc `->`(gameMode: var GameMode, newGameMode: GameMode) =
-  ## custom operator to change game modes just for the
-  ## heck of it
-  gameModeInits[newGameMode.ord]()
-  gameMode = newGameMode
+proc switchGameMode(mode: GameMode) =
+  gameModeInits[mode.ord]()
+  gameMode = mode
 
 # Sound funcs
 
@@ -289,7 +287,7 @@ proc handleBall() {.inline.} =
 
   if ballYReal > 0xa0 or ballXReal > 0x70 or # ball fell off
     score >= MaxScore: # beat the game
-    gameMode -> gmIntermission
+    switchGameMode gmIntermission
 
 proc updateSprites() {.inline.} =
   moveSprite sPaddle.ord, paddleXReal, paddleYReal
@@ -395,7 +393,7 @@ proc runTitle() =
   ## press start to play!
   if jStart in joyState:
     playIntermissionSound()
-    gameMode -> gmGame
+    switchGameMode gmGame
 
 proc runGame() =
   if (WyReg < 0x90): # scroll the window down from title
@@ -415,7 +413,7 @@ proc runGame() =
 proc runIntermission() =
   ## there's nothing here, so
   ## let's just go back to the game
-  gameMode -> gmGame
+  switchGameMode gmGame
 
 # entry point
 when isMainModule:
@@ -449,7 +447,7 @@ when isMainModule:
     lcdcOn, lcdcBgOn, lcdcWinOn, lcdcObjOn, lcdcWin9c00
   }
 
-  gameMode -> gmTitle
+  switchGameMode gmTitle
 
   while true:
     # we're gonna be reading

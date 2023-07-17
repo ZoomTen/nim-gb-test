@@ -39,6 +39,30 @@ type
       - `StatReg`_
   ]##
 
+  AudEnable* = enum ##[
+    See also:
+      - `Nr52Reg`_
+  ]##
+    audioOff = 0
+    audioOn = 0x80'u8
+
+  AudTermFlag* {.size: 1.} = enum
+    # right channels
+    aTerm1R = 0
+    aTerm2R
+    aTerm3R
+    aTerm4R
+    # left channels
+    aTerm1L
+    aTerm2L
+    aTerm3L
+    aTerm4L
+
+  AudTermFlags* = set[AudTermFlag] ##[
+    See also:
+      - `Nr51Reg`_
+  ]##
+
 var
   Vram* {.importc: "_VRAM", gbhw.}: array[0x2000, uint8]                    ##\
     ## VRAM space, spans from 0x8000 to 0x9fff.
@@ -75,3 +99,31 @@ var
   Obp1Reg* {.importc: "OBP1_REG", gbhw.}: uint8
 
   LcdcReg* {.importc: "LCDC_REG", gbhw.}: LcdcFlags
+
+  Nr10Reg* {.importc: "NR10_REG", gbhw.}: uint8
+  Nr11Reg* {.importc: "NR11_REG", gbhw.}: uint8
+  Nr12Reg* {.importc: "NR12_REG", gbhw.}: uint8
+  Nr13Reg* {.importc: "NR13_REG", gbhw.}: uint8
+  Nr14Reg* {.importc: "NR14_REG", gbhw.}: uint8
+
+  Nr21Reg* {.importc: "NR21_REG", gbhw.}: uint8
+  Nr22Reg* {.importc: "NR22_REG", gbhw.}: uint8
+  Nr23Reg* {.importc: "NR23_REG", gbhw.}: uint8
+  Nr24Reg* {.importc: "NR24_REG", gbhw.}: uint8
+
+  Nr30Reg* {.importc: "NR30_REG", gbhw.}: uint8
+  Nr31Reg* {.importc: "NR31_REG", gbhw.}: uint8
+  Nr32Reg* {.importc: "NR32_REG", gbhw.}: uint8
+  Nr33Reg* {.importc: "NR33_REG", gbhw.}: uint8
+  Nr34Reg* {.importc: "NR34_REG", gbhw.}: uint8
+
+  Nr41Reg* {.importc: "NR41_REG", gbhw.}: uint8
+  Nr42Reg* {.importc: "NR42_REG", gbhw.}: uint8
+  Nr43Reg* {.importc: "NR43_REG", gbhw.}: uint8
+  Nr44Reg* {.importc: "NR44_REG", gbhw.}: uint8
+
+  Nr50Reg* {.importc: "NR50_REG", gbhw.}: uint8
+  Nr51Reg* {.importc: "NR51_REG", gbhw.}: AudTermFlags
+  Nr52Reg* {.importc: "NR52_REG", gbhw.}: AudEnable
+
+  Aud3Wave* {.importc: "AUD3WAVE", gbhw.}: array[0x10, uint8]

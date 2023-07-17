@@ -167,6 +167,30 @@ proc `->`(gameMode: var GameMode, newGameMode: GameMode) =
   gameModeInits[newGameMode.ord]()
   gameMode = newGameMode
 
+# Sound funcs
+
+proc playBounceSound() {.inline.} =
+  # TODO: a better sound API?
+  ## Play bounce sound on channel 2
+  Nr21Reg = 0x85
+  Nr22Reg = 0xc1
+  Nr23Reg = 0x68
+  Nr24Reg = 0xc5
+
+proc playWallBounceSound() {.inline.} =
+  ## Play wall bounce sound on channel 2
+  Nr21Reg = 0x85
+  Nr22Reg = 0x71
+  Nr23Reg = 0x22
+  Nr24Reg = 0xc2
+
+proc playBreakSound() {.inline.} =
+  ## Play break sound on the noise channel
+  Nr41Reg = 0x01
+  Nr42Reg = 0xc1
+  Nr43Reg = 0x61
+  Nr44Reg = 0xc0
+
 # Various funcs
 
 func isCollidingTile(v: uint8): bool =
@@ -182,6 +206,14 @@ func isCollidingTile(v: uint8): bool =
     bgPaddleRhalf
   ]
 
+proc playIntermissionSound() {.inline.} =
+  ## Play intermission sound on channel 1
+  Nr10Reg = 0x43
+  Nr11Reg = 0x80
+  Nr12Reg = 0xc4
+  Nr13Reg = 0x22
+  Nr14Reg = 0xc3
+
 proc removeBrick(tile, x, y: uint8) =
   # when hitting one half of a brick,
   # remove the corresponding half as well
@@ -190,12 +222,14 @@ proc removeBrick(tile, x, y: uint8) =
     discard setBkgTileXY(x, y, 8)
     discard setBkgTileXY(x+1, y, 8)
     score += 1
+    playBreakSound()
   of bgPaddleRhalf:
     discard setBkgTileXY(x, y, 8)
     discard setBkgTileXY(x-1, y, 8)
     score += 1
+    playBreakSound()
   else:
-    discard
+    playWallBounceSound()
 
 proc handlePaddle() {.inline.} =
   if jRight in joyState:
@@ -248,6 +282,7 @@ proc handleBall() {.inline.} =
     (ballXReal >= paddleXReal-8) and
     (ballXReal <= paddleXReal+8):
     ballSpeedY = -ballSpeedY
+    playBounceSound()
 
   # accelerate ball
   ballX += ballSpeedX
@@ -324,6 +359,8 @@ proc initIntermission() =
     before continuing, but I don't feel like
     it right now :(
   ]#
+  playIntermissionSound()
+
   # wait a while
   delay 800
 
@@ -358,6 +395,7 @@ proc initIntermission() =
 proc runTitle() =
   ## press start to play!
   if jStart in joyState:
+    playIntermissionSound()
     gameMode -> gmGame
 
 proc runGame() =
@@ -396,6 +434,18 @@ when isMainModule:
   tilesTitle.setWinData(0x80, tilesTitle.len.asNumTiles)
   mapTitle.setWinTiles(0, 0, 20, 18)
 
+  # prepare audio
+  Nr52Reg = audioOff
+  Nr52Reg = audioOn
+
+  Nr51Reg = {
+    aTerm1L, aTerm2L, aTerm3L, aTerm4L,
+    aTerm1R, aTerm2R, aTerm3R, aTerm4R
+  }
+
+  Nr50Reg = 0x77 # TODO
+  
+  # set the screen
   LcdcReg = {
     lcdcOn, lcdcBgOn, lcdcWinOn, lcdcObjOn, lcdcWin9c00
   }

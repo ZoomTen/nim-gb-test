@@ -20,6 +20,7 @@ typedef int8_t NI8;
 typedef int16_t NI16;
 typedef int32_t NI32;
 typedef int64_t NI64;
+typedef float NF;
 
 typedef uint8_t NU8;
 typedef uint16_t NU16;

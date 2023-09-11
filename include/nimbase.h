@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <gbdk/platform.h>
 
 #define N_LIB_PRIVATE
 #define N_NIMCALL(rettype, name) rettype name

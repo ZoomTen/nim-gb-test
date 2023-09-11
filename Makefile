@@ -9,7 +9,7 @@ NIM_SRC := nim_src
 
 ASM_SRC := $(wildcard asm/*.asm)
 
-NIM_FLAGS := --gc:none --os:standalone -d:danger --checks:off --showAllMismatches:on
+NIM_FLAGS := --mm:none --os:standalone -d:danger --threads:off
 NIM := nim
 
 ROM_NAME := Rebrickd
